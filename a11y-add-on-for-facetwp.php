@@ -37,23 +37,23 @@ function a11y_addon_update_check() {
 		//flush anything? update anything?
 	}
 }
-add_action( 'plugins_loaded', 'editor_handbook_update_check' );
+add_action( 'plugins_loaded', 'a11y_addon_update_check' );
 
 
 /**
  * Enqueue jQuery because FacetWP just assumes it's enqueued.
 */
-function lightship_facet_assets() {
+function a11y_addon_facet_assets() {
   wp_enqueue_script('jquery');
 }
-add_action( 'wp_enqueue_scripts', 'lightship_facet_assets' );
+add_action( 'wp_enqueue_scripts', 'a11y_addon_facet_assets' );
 
 
 /**
  * Add class to all filters
  * @link https://facetwp.com/documentation/developers/output/facetwp_facet_html/
 */
-function fwp_add_facet_class( $output, $params ){
+function a11y_addon_add_facet_class( $output, $params ){
   if ( 'dropdown' == $params['facet']['type'] ) {
     $output = str_replace( 'facetwp-dropdown', 'facetwp-dropdown a11y-addon-filter', $output );
 	}
@@ -65,14 +65,14 @@ function fwp_add_facet_class( $output, $params ){
     return $output;
 }
 
-add_filter( 'facetwp_facet_html', 'fwp_add_facet_class', 10, 2);
+add_filter( 'facetwp_facet_html', 'a11y_addon_add_facet_class', 10, 2);
 
 /**
  * Programatically add labels above filters
  * @link https://facetwp.com/add-labels-above-each-facet/
 */
 
-function fwp_add_facet_labels() {
+function a11y_addon_add_facet_labels() {
   ?>
   <script>
   (function($) {
@@ -163,23 +163,23 @@ function fwp_add_facet_labels() {
   <?php
 }
 
-add_action( 'wp_head', 'fwp_add_facet_labels', 100 );
+add_action( 'wp_head', 'a11y_addon_add_facet_labels', 100 );
 
 /**
  * Hide counts in all dropdowns
  * @link https://facetwp.com/help-center/facets/facet-types/dropdown/
 */
 
-function fwp_hide_dropdown_counts( $return, $params ) {
+function a11y_addon_hide_dropdown_counts( $return, $params ) {
 	return false;
 }
-add_filter( 'facetwp_facet_dropdown_show_counts', 'fwp_hide_dropdown_counts', 10, 2 );
+add_filter( 'facetwp_facet_dropdown_show_counts', 'a11y_addon_hide_dropdown_counts', 10, 2 );
 
 /**
  * Disable auto-refresh when checkbox is clicked
  * @link https://facetwp.com/how-to-disable-facet-auto-refresh-and-add-a-submit-button/
 */
-function fwp_disable_auto_refresh() {
+function a11y_addon_disable_auto_refresh() {
 ?>
 	<script>
 		(function($) {
@@ -208,14 +208,14 @@ function fwp_facetwp_facet_pager_link($html, $params) {
 
   return $html;
 }
-add_action( 'facetwp_facet_pager_link', 'fwp_facetwp_facet_pager_link', 100, 2 );
+add_action( 'facetwp_facet_pager_link', 'a11y_addon_facetwp_facet_pager_link', 100, 2 );
 
 /**
 * Scroll back to top of results when pager is clicked
 * @link https://facetwp.com/how-to-scroll-the-page-on-facet-interaction/#scroll-when-a-pager-facet-is-used
 **/
 
-function fwp_scroll_on_pager_interaction() {
+function a11y_addon_scroll_on_pager_interaction() {
 ?>
   <script>
     (function($) {
@@ -237,4 +237,4 @@ function fwp_scroll_on_pager_interaction() {
   </script>
 <?php
 }
-add_action( 'facetwp_scripts', 'fwp_scroll_on_pager_interaction' );
+add_action( 'facetwp_scripts', 'a11y_addon_scroll_on_pager_interaction' );
