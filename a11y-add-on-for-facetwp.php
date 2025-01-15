@@ -272,7 +272,7 @@ function a11y_addon_disable_auto_refresh() {
 	</script>
 <?php
 }
-//add_action( 'facetwp_scripts', 'fwp_disable_auto_refresh', 100 );
+add_action( 'facetwp_scripts', 'a11y_addon_disable_auto_refresh', 100 );
 
 // Customize icon for prev/next pagination links.
 function fwp_facetwp_facet_pager_link($html, $params) {
