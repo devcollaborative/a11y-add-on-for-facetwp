@@ -187,16 +187,6 @@ function a11y_addon_add_facet_labels() {
     });
 
     $(document).on('facetwp-loaded', function() {
-      $('.facetwp-checkbox, .facetwp-radio').each(function() {
-        $(this).attr('role', 'checkbox');
-        $(this).attr('aria-checked', $(this).hasClass('checked') ? 'true' : 'false');
-        $(this).attr('tabindex', 0);
-      });
-
-      $('.facetwp-type-checkboxes').each(function() {
-          $(this).attr('aria-label', remove_underscores($(this).data('name')));
-          $(this).attr('role', 'group' );
-      });
 
       // pager
       $('.facetwp-pager').attr('role', 'navigation');
