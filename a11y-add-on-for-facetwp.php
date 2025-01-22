@@ -2,7 +2,7 @@
 /**
  * Plugin Name: A11y Add-on for FacetWP
  * Plugin URI: https://github.com/devcollaborative/A11y-Add-on-for-FacetWP
- * Description: Adds better a11y support to FacetWP plugin
+ * Description: Adds better a11y support to FacetWP plugin. Disable FacetWP's native "Load a11y support"
  * Version: 1.0
  * Requires at least: 6.4
  * Requires PHP: 8
@@ -54,6 +54,7 @@ add_action( 'wp_enqueue_scripts', 'a11y_addon_facet_assets' );
  * @link https://facetwp.com/documentation/developers/output/facetwp_facet_html/
 */
 function a11y_addon_add_facet_class( $output, $params ){
+
   if ( 'dropdown' == $params['facet']['type'] ) {
     $output = str_replace( 'facetwp-dropdown', 'facetwp-dropdown a11y-addon-filter', $output );
 	}
@@ -203,8 +204,6 @@ function a11y_addon_add_facet_labels() {
         var facet_name = $facet.attr('data-name');
         var facet_type = $facet.attr('data-type');
 
-        console.log(facet_name);
-
         if ( facet_name && facet_type ) {
           // Don't label the pagination or reset
           if ( facet_name.match(/pagination/g) ||
@@ -265,7 +264,7 @@ function a11y_addon_disable_auto_refresh() {
 add_action( 'facetwp_scripts', 'a11y_addon_disable_auto_refresh', 100 );
 
 // Customize icon for prev/next pagination links.
-function fwp_facetwp_facet_pager_link($html, $params) {
+function a11y_addon_facetwp_facet_pager_link($html, $params) {
   if ( 'next' == $params['extra_class'] ) {
     $icon = 'Next <svg class="icon" aria-hidden="true"><use xlink:href="#caret-right"/></svg></svg>';
     $html = str_replace( 'Next', $icon, $html );
