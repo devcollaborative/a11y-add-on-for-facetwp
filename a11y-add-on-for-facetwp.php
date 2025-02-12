@@ -51,6 +51,7 @@ add_action( 'wp_enqueue_scripts', 'a11y_addon_facet_assets' );
 
 /**
  * Adjusts markup for specific facets so they use real input elements
+ * Adds matching label for and ids to all facets
  *
  * @param string $output HTML
  * @param array $params FacetWP field parameters
@@ -59,7 +60,7 @@ add_action( 'wp_enqueue_scripts', 'a11y_addon_facet_assets' );
  * 
  * @todo consider whether a combination of totally custom output and str_replace make sense or whether doing something with the WP HTML API might make more sense in the long term
  * 
- * courtesy of Mark Root-Wiley
+ * most of this courtesy of Mark Root-Wiley
  * @link https://github.com/mrwweb/accessibility-addon-for-facetwp
  */
 function a11y_addon_transform_facet_markup( $output, $params ) {
