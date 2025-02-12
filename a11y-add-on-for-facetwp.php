@@ -221,7 +221,7 @@ function a11y_addon_add_facet_labels() {
               // Checkboxes & radio buttons don't need a <label> element, facetWP adds aria-label to them.
               $facet.before('<div class="facet-label" aria-hidden="true">' + facet_label + '</div>');
             } else {
-              $facet.before('<label class="facet-label" for="'+facet_label.replace(/\s/g, '')+'">' + facet_label + '</label>');
+              $facet.before('<label class="facet-label" for="'+facet_name.replace(/\s/g, '')+'">' + facet_label + '</label>');
             }
           }
         }
