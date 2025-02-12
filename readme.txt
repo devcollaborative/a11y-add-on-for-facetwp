@@ -1,0 +1,29 @@
+=== A11y-Add-on-for-FacetWP ===
+Contributors: devcollab, hbrokmeier, cparkinson, mrwweb 
+Tags: accessibility
+Requires at least: 6.0
+Tested up to: 6.7.1
+Stable tag: 
+Requires PHP: 8.0
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+
+DevCollaborative's accessibility improvements for FacetWP Wordpress plugin
+
+=== Description ===
+
+A11y Add-on for FacetWP adds accessibility enhancements for FacetWP's form elements.
+
+FacetWP must be installed and activated.
+
+- Wraps all facets in a div with class=facet-wrap
+- Adds a label to each facet with text=facet_label, for=facet_name
+- Adds an id to each facet with id=facet_name
+- FacetWP default checkbox markup replaced with semantic HTML checkboxes
+- Search field uses &lt;search&gt; landmark and real &lt;button&gt;
+- Always hides counts in dropdowns
+- Disables auto-refresh
+- Customizes icon for prev/next pagination links
+- Scroll back to top of results when pager is clicked
+
+Semantic HTML checkboxes courtesy of Mark Root-Wiley, [MRW Web Design](https://mrwweb.com/) [Accessibility Addon for FacetWP](https://github.com/mrwweb/accessibility-addon-for-facetwp)
