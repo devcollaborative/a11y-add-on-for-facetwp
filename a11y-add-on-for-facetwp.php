@@ -126,7 +126,16 @@ function a11y_addon_transform_facet_markup( $output, $params ) {
       // placeholders are bad for UX
       $output = str_replace( 'placeholder="Enter keywords"', '', $output );
       break;
-    
+
+    case 'dropdown':
+      
+      $output = str_replace( 'facetwp-dropdown', 'facetwp-dropdown a11y-addon-filter', $output );
+
+      $id_string = 'id="'.$params['facet']['name'].'" class=';
+      
+      $output = str_replace('class=', $id_string, $output);
+
+   
     /*
     //do we want this?
     case 'pager':            
