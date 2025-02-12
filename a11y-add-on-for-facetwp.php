@@ -50,25 +50,6 @@ add_action( 'wp_enqueue_scripts', 'a11y_addon_facet_assets' );
 
 
 /**
- * Add class to all filters
- * @link https://facetwp.com/documentation/developers/output/facetwp_facet_html/
-*/
-function a11y_addon_add_facet_class( $output, $params ){
-
-  if ( 'dropdown' == $params['facet']['type'] ) {
-    $output = str_replace( 'facetwp-dropdown', 'facetwp-dropdown a11y-addon-filter', $output );
-	}
-
-	$label = str_replace( ' ','', $params['facet']['label'] );
-	$id_string = 'id="'.$label.'" class=';
-    $output = str_replace('class=', $id_string, $output);
-
-    return $output;
-}
-
-add_filter( 'facetwp_facet_html', 'a11y_addon_add_facet_class', 20, 2);
-
-/**
  * Adjusts markup for specific facets so they use real input elements
  *
  * @param string $output HTML
@@ -132,10 +113,15 @@ function a11y_addon_transform_facet_markup( $output, $params ) {
       $output = str_replace( 'facetwp-dropdown', 'facetwp-dropdown a11y-addon-filter', $output );
 
       $id_string = 'id="'.$params['facet']['name'].'" class=';
-      
+
       $output = str_replace('class=', $id_string, $output);
 
-   
+    default:
+
+      $id_string = 'id="'.$params['facet']['name'].'" class=';
+
+      $output = str_replace('class=', $id_string, $output);
+
     /*
     //do we want this?
     case 'pager':            
