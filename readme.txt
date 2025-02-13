@@ -2,8 +2,8 @@
 Contributors: devcollab, hbrokmeier, cparkinson, mrwweb 
 Tags: accessibility
 Requires at least: 6.0
-Tested up to: 6.7.1
-Stable tag: 
+Tested up to: 6.7.2
+Stable tag: 1.0.0
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -27,3 +27,9 @@ FacetWP must be installed and activated.
 - Scroll back to top of results when pager is clicked
 
 Semantic HTML checkboxes courtesy of Mark Root-Wiley, [MRW Web Design](https://mrwweb.com/) [Accessibility Addon for FacetWP](https://github.com/mrwweb/accessibility-addon-for-facetwp)
+
+=== Changelog ===
+= 1.0.0 = 
+* Added: Accessibility improvements in html output for checkboxes, search box. All facets get labels, ids, and wrapper divs.
+
+**Full Changelog**: https://github.com/devcollaborative/a11y-add-on-for-facetwp/commits/v1.0.0
