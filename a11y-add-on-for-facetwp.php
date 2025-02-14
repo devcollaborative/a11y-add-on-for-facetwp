@@ -117,6 +117,21 @@ function a11y_addon_transform_facet_markup( $output, $params ) {
 
       $output = str_replace('class=', $id_string, $output);
 
+    case 'radio':
+      $output = '<div class="facetwp-facet facet-wrap facetwp-type-radio" role="radiogroup"  id="'.esc_attr( $params['facet']['name'] ).'">';
+      foreach( $params['values'] as $value ) {
+           $output .= sprintf(
+            '<input type="radio" id="%1$s" name="%3$s" value="%2$s">
+            <label for="%1$s">%2$s</label><br/>',
+            esc_attr( 'radio-'.$value['facet_value'] ),
+            esc_html( $value['facet_display_value'] ),
+            esc_attr( $params['facet']['name'] )
+           ); 
+      }
+
+      $output .= '</div>';
+      break;
+
     default:
 
       $id_string = 'id="'.$params['facet']['name'].'" class=';
