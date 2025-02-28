@@ -21,7 +21,7 @@ FacetWP must be installed and activated.
 
 ## Search button
 We add the Submit button as a Custom HTML block:
-````
+```
 <button id="search" onclick="FWP.refresh()" class="facetsubmit" type="submit">Filter</button>
 ```
 
