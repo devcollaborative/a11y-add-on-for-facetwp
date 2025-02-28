@@ -71,18 +71,17 @@ function a11y_addon_transform_facet_markup( $output, $params ) {
   
     case 'checkboxes':
       // Note: The trick to this working was moving the facetwp-checkbox class and data-value attribute to the `input`. Clicking the label works because the input element still emits a click event when the label is clicked. Leaving that class and attribute on the wrapping list item resulted in two events being fired when the label was clicked.
-      $output = '';
-      $output .= '<ul>';
+      $output = '<fieldset>';
       foreach( $params['values'] as $value ) {
         if( $value['counter'] > 0 || ! $params['facet']['preserve_ghosts'] === 'no' ) {
           $output .= sprintf(
-            '<li>
+            '<div>
               <input type="checkbox" id="%3$s"%1$s value="%2$s" class="facetwp-checkbox%1$s" data-value="%2$s">
               <label for="%3$s">
                 <span class="facetwp-display-value">%4$s</span>
                 <span class="facetwp-counter">(%5$d)</span>
               </label>
-            </li>',
+            </div>',
             in_array( $value['facet_value'], $params['selected_values'] ) ? ' checked' : '',
             esc_attr( $value['facet_value'] ),
             'checkbox-' . esc_attr( $value['term_id'] ),
@@ -91,7 +90,7 @@ function a11y_addon_transform_facet_markup( $output, $params ) {
           );
         }
       }
-      $output .= '</ul>';
+      $output .= '</fieldset>';
       break;
 
     case 'search':
@@ -118,7 +117,7 @@ function a11y_addon_transform_facet_markup( $output, $params ) {
       $output = str_replace('class=', $id_string, $output);
 
     case 'radio':
-      $output = '<div class="facetwp-facet facet-wrap facetwp-type-radio" role="radiogroup"  id="'.esc_attr( $params['facet']['name'] ).'">';
+      $output = '<fieldset><div class="facetwp-facet facet-wrap facetwp-type-radio" role="radiogroup"  id="'.esc_attr( $params['facet']['name'] ).'">';
       foreach( $params['values'] as $value ) {
            $output .= sprintf(
             '<input type="radio" id="%1$s" name="%3$s" value="%2$s">
@@ -129,7 +128,7 @@ function a11y_addon_transform_facet_markup( $output, $params ) {
            ); 
       }
 
-      $output .= '</div>';
+      $output .= '</div></fieldset>';
       break;
 
     default:
@@ -226,11 +225,12 @@ function a11y_addon_add_facet_labels() {
           var facet_label = FWP.settings.labels[facet_name];
 
           if ($facet.closest('.facet-wrap').length < 1 && $facet.closest('.facetwp-flyout').length < 1) {
+
             $facet.wrap(`<div class="facet-wrap facet-wrap-${facet_name}"></div>`);
 
             if ( facet_type.match(/checkboxes/g) || facet_type.match(/radio/g) ){
               // Checkboxes & radio buttons don't need a <label> element, facetWP adds aria-label to them.
-              $facet.before('<div class="facet-label" aria-hidden="true">' + facet_label + '</div>');
+              $facet.before('<legend class="facet-label">' + facet_label + '</legend>');
             } else {
               $facet.before('<label class="facet-label" for="'+facet_name.replace(/\s/g, '')+'">' + facet_label + '</label>');
             }
