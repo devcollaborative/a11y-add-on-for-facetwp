@@ -134,6 +134,12 @@ function a11y_addon_transform_facet_markup( $output, $params ) {
       $output .= '</fieldset>';
       break;
 
+    case 'reset':
+
+      $output = str_replace('button','button type="reset"',$output);
+
+      break; 
+
     default:
 
       $id_string = 'id="'.$params['facet']['name'].'" class=';
