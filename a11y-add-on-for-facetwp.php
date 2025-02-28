@@ -117,6 +117,8 @@ function a11y_addon_transform_facet_markup( $output, $params ) {
 
       $output = str_replace('class=', $id_string, $output);
 
+      break;
+
     case 'radio':
       $output = sprintf('<fieldset><legend>%1$s</legend>', 
           $params['facet']['label'] );
@@ -204,12 +206,8 @@ function a11y_addon_add_facet_labels() {
         var facet_type = $facet.attr('data-type');
 
         if ( facet_name && facet_type ) {
-          // Don't label the pagination or reset  XXX clean this up
-          if ( facet_type.match(/checkboxes/g) ||
-              facet_type.match(/radio/g)
-              facet_name.match(/pagination/g) ||
-              facet_name.match(/reset/g) ||
-              facet_name.match(/results_count/g) ) {
+          // Don't label some facets
+          if ( facet_type.match(/checkboxes|radio|pagination|reset|results_count/g) ) {
             return;
           }
 
