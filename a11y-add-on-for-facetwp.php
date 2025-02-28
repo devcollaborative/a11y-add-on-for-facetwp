@@ -71,7 +71,8 @@ function a11y_addon_transform_facet_markup( $output, $params ) {
   
     case 'checkboxes':
       // Note: The trick to this working was moving the facetwp-checkbox class and data-value attribute to the `input`. Clicking the label works because the input element still emits a click event when the label is clicked. Leaving that class and attribute on the wrapping list item resulted in two events being fired when the label was clicked.
-      $output = '<fieldset>';
+      $output = sprintf('<fieldset><legend>%1$s</legend>', 
+          $params['facet']['label'] );
       foreach( $params['values'] as $value ) {
         if( $value['counter'] > 0 || ! $params['facet']['preserve_ghosts'] === 'no' ) {
           $output .= sprintf(
@@ -117,18 +118,19 @@ function a11y_addon_transform_facet_markup( $output, $params ) {
       $output = str_replace('class=', $id_string, $output);
 
     case 'radio':
-      $output = '<fieldset><div class="facetwp-facet facet-wrap facetwp-type-radio" role="radiogroup"  id="'.esc_attr( $params['facet']['name'] ).'">';
+      $output = sprintf('<fieldset><legend>%1$s</legend>', 
+          $params['facet']['label'] );
       foreach( $params['values'] as $value ) {
            $output .= sprintf(
-            '<input type="radio" id="%1$s" name="%3$s" value="%2$s">
-            <label for="%1$s">%2$s</label><br/>',
+            '<div><input type="radio" id="%1$s" name="%3$s" value="%2$s">
+            <label for="%1$s">%2$s</label></div>',
             esc_attr( 'radio-'.$value['facet_value'] ),
             esc_html( $value['facet_display_value'] ),
             esc_attr( $params['facet']['name'] )
            ); 
       }
 
-      $output .= '</div></fieldset>';
+      $output .= '</fieldset>';
       break;
 
     default:
@@ -215,8 +217,10 @@ function a11y_addon_add_facet_labels() {
         var facet_type = $facet.attr('data-type');
 
         if ( facet_name && facet_type ) {
-          // Don't label the pagination or reset
-          if ( facet_name.match(/pagination/g) ||
+          // Don't label the pagination or reset  XXX clean this up
+          if ( facet_type.match(/checkboxes/g) ||
+              facet_type.match(/radio/g)
+              facet_name.match(/pagination/g) ||
               facet_name.match(/reset/g) ||
               facet_name.match(/results_count/g) ) {
             return;
@@ -226,14 +230,12 @@ function a11y_addon_add_facet_labels() {
 
           if ($facet.closest('.facet-wrap').length < 1 && $facet.closest('.facetwp-flyout').length < 1) {
 
-            $facet.wrap(`<div class="facet-wrap facet-wrap-${facet_name}"></div>`);
+             //wrapper div
+              $facet.wrap(`<div class="facet-wrap facet-wrap-${facet_name}"></div>`);
 
-            if ( facet_type.match(/checkboxes/g) || facet_type.match(/radio/g) ){
-              // Checkboxes & radio buttons don't need a <label> element, facetWP adds aria-label to them.
-              $facet.before('<legend class="facet-label">' + facet_label + '</legend>');
-            } else {
+              //label
               $facet.before('<label class="facet-label" for="'+facet_name.replace(/\s/g, '')+'">' + facet_label + '</label>');
-            }
+            
           }
         }
       });
