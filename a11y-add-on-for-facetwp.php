@@ -139,19 +139,6 @@ function a11y_addon_transform_facet_markup( $output, $params ) {
 
       $output = str_replace('class=', $id_string, $output);
 
-    /*
-    //do we want this?
-    case 'pager':            
-      // put links in a list with nav element
-      $output = str_replace( '<div', '<nav aria-labelledby="resource-paging-heading"><h3 class="screen-reader-text" id="resource-paging-heading">' . esc_html__( 'Results Pages', 'afwp' ) . '</h3><ul', $output );
-      $output = str_replace( '</div>', '</ul></nav>', $output );
-      $output = str_replace( '<a', '<li><a', $output );
-      $output = str_replace( '</a>', '</a></li>', $output );
-      // add tabindex to valid links only for keyboard accessibility
-      $output = str_replace( 'data-page', 'tabindex="0" data-page', $output );
-      break;
-    */
-
   }
   
   return $output;
