@@ -71,18 +71,18 @@ function a11y_addon_transform_facet_markup( $output, $params ) {
   
     case 'checkboxes':
       // Note: The trick to this working was moving the facetwp-checkbox class and data-value attribute to the `input`. Clicking the label works because the input element still emits a click event when the label is clicked. Leaving that class and attribute on the wrapping list item resulted in two events being fired when the label was clicked.
-      $output = '';
-      $output .= '<ul>';
+      $output = sprintf('<fieldset><legend>%1$s</legend>', 
+          $params['facet']['label'] );
       foreach( $params['values'] as $value ) {
         if( $value['counter'] > 0 || ! $params['facet']['preserve_ghosts'] === 'no' ) {
           $output .= sprintf(
-            '<li>
+            '<div>
               <input type="checkbox" id="%3$s"%1$s value="%2$s" class="facetwp-checkbox%1$s" data-value="%2$s">
               <label for="%3$s">
                 <span class="facetwp-display-value">%4$s</span>
                 <span class="facetwp-counter">(%5$d)</span>
               </label>
-            </li>',
+            </div>',
             in_array( $value['facet_value'], $params['selected_values'] ) ? ' checked' : '',
             esc_attr( $value['facet_value'] ),
             'checkbox-' . esc_attr( $value['term_id'] ),
@@ -91,7 +91,7 @@ function a11y_addon_transform_facet_markup( $output, $params ) {
           );
         }
       }
-      $output .= '</ul>';
+      $output .= '</fieldset>';
       break;
 
     case 'search':
@@ -103,8 +103,7 @@ function a11y_addon_transform_facet_markup( $output, $params ) {
       $id = $params['facet']['name'];
       $output = str_replace( 
         '<input', '<div class="trec-facetwp-search-wrapper"><input id="' . esc_attr( $id ) . '"', $output );
-      // facetwp-icon class is important to retain event handling
-      $output = str_replace( '</span>', '<button class="facetwp-icon"><span class="ally-addon-search-submit-text">Submit</span></button></div></span>', $output );
+     
       // placeholders are bad for UX
       $output = str_replace( 'placeholder="Enter keywords"', '', $output );
       break;
@@ -117,24 +116,35 @@ function a11y_addon_transform_facet_markup( $output, $params ) {
 
       $output = str_replace('class=', $id_string, $output);
 
+      break;
+
+    case 'radio':
+      $output = sprintf('<fieldset><legend>%1$s</legend>', 
+          $params['facet']['label'] );
+      foreach( $params['values'] as $value ) {
+           $output .= sprintf(
+            '<div><input type="radio" id="%1$s" name="%3$s" value="%2$s">
+            <label for="%1$s">%2$s</label></div>',
+            esc_attr( 'radio-'.$value['facet_value'] ),
+            esc_html( $value['facet_display_value'] ),
+            esc_attr( $params['facet']['name'] )
+           ); 
+      }
+
+      $output .= '</fieldset>';
+      break;
+
+    case 'reset':
+
+      $output = str_replace('button','button type="reset"',$output);
+
+      break; 
+
     default:
 
       $id_string = 'id="'.$params['facet']['name'].'" class=';
 
       $output = str_replace('class=', $id_string, $output);
-
-    /*
-    //do we want this?
-    case 'pager':            
-      // put links in a list with nav element
-      $output = str_replace( '<div', '<nav aria-labelledby="resource-paging-heading"><h3 class="screen-reader-text" id="resource-paging-heading">' . esc_html__( 'Results Pages', 'afwp' ) . '</h3><ul', $output );
-      $output = str_replace( '</div>', '</ul></nav>', $output );
-      $output = str_replace( '<a', '<li><a', $output );
-      $output = str_replace( '</a>', '</a></li>', $output );
-      // add tabindex to valid links only for keyboard accessibility
-      $output = str_replace( 'data-page', 'tabindex="0" data-page', $output );
-      break;
-    */
 
   }
   
@@ -201,24 +211,21 @@ function a11y_addon_add_facet_labels() {
         var facet_type = $facet.attr('data-type');
 
         if ( facet_name && facet_type ) {
-          // Don't label the pagination or reset
-          if ( facet_name.match(/pagination/g) ||
-              facet_name.match(/reset/g) ||
-              facet_name.match(/results_count/g) ) {
+          // Don't label some facets
+          if ( facet_type.match(/checkboxes|radio|pagination|reset|results_count/g) ) {
             return;
           }
 
           var facet_label = FWP.settings.labels[facet_name];
 
           if ($facet.closest('.facet-wrap').length < 1 && $facet.closest('.facetwp-flyout').length < 1) {
-            $facet.wrap(`<div class="facet-wrap facet-wrap-${facet_name}"></div>`);
 
-            if ( facet_type.match(/checkboxes/g) || facet_type.match(/radio/g) ){
-              // Checkboxes & radio buttons don't need a <label> element, facetWP adds aria-label to them.
-              $facet.before('<div class="facet-label" aria-hidden="true">' + facet_label + '</div>');
-            } else {
+             //wrapper div
+              $facet.wrap(`<div class="facet-wrap facet-wrap-${facet_name}"></div>`);
+
+              //label
               $facet.before('<label class="facet-label" for="'+facet_name.replace(/\s/g, '')+'">' + facet_label + '</label>');
-            }
+            
           }
         }
       });
