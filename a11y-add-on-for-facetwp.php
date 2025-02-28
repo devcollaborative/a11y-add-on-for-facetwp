@@ -103,8 +103,7 @@ function a11y_addon_transform_facet_markup( $output, $params ) {
       $id = $params['facet']['name'];
       $output = str_replace( 
         '<input', '<div class="trec-facetwp-search-wrapper"><input id="' . esc_attr( $id ) . '"', $output );
-      // facetwp-icon class is important to retain event handling
-      $output = str_replace( '</span>', '<button class="facetwp-icon"><span class="ally-addon-search-submit-text">Submit</span></button></div></span>', $output );
+     
       // placeholders are bad for UX
       $output = str_replace( 'placeholder="Enter keywords"', '', $output );
       break;
