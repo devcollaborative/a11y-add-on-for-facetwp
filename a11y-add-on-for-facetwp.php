@@ -140,6 +140,14 @@ function a11y_addon_transform_facet_markup( $output, $params ) {
 
       break; 
 
+    case 'pager':
+
+      $wrapper = '<nav class="navigation pagination" aria-label="Pagination"><h2 class="screen-reader-text">Pagination</h2>'; 
+
+      $output = sprintf('
+          <nav class="navigation pagination" aria-label="Pagination"><h2 class="screen-reader-text">Pagination</h2>%1$s</nav>', 
+          $output);
+
     default:
 
       $id_string = 'id="'.$params['facet']['name'].'" class=';
@@ -212,7 +220,7 @@ function a11y_addon_add_facet_labels() {
 
         if ( facet_name && facet_type ) {
           // Don't label some facets
-          if ( facet_type.match(/checkboxes|radio|pagination|reset|results_count/g) ) {
+          if ( facet_type.match(/checkboxes|radio|pager|reset|results_count/g) ) {
             return;
           }
 
