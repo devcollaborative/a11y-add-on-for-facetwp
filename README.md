@@ -11,6 +11,7 @@ FacetWP must be installed and activated.
 - Wraps all facets in a div with class=facet-wrap
 - Adds a label to some facets with text=facet_label, for=facet_name
 - Adds fieldset and legend to checkboxes and radio buttons
+- Wrap pagination in nav tag, add screenreader h2
 - Adds an id to each facet with id=facet_name
 - FacetWP default checkbox markup replaced with semantic HTML checkboxes
 - Search field uses &lt;search&gt; landmark, icon is removed
