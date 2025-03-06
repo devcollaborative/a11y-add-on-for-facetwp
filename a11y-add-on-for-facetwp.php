@@ -142,11 +142,11 @@ function a11y_addon_transform_facet_markup( $output, $params ) {
 
     case 'pager':
 
-      $wrapper = '<nav class="navigation pagination" aria-label="Pagination"><h2 class="screen-reader-text">Pagination</h2>'; 
-
       $output = sprintf('
           <nav class="navigation pagination" aria-label="Pagination"><h2 class="screen-reader-text">Pagination</h2>%1$s</nav>', 
           $output);
+      
+      break;
 
     default:
 
@@ -205,12 +205,6 @@ function a11y_addon_add_facet_labels() {
 
       // pager
       $('.facetwp-pager').attr('role', 'navigation');
-      $('.facetwp-page').each(function(e) {
-          let $el = $(this);
-          $el.attr('role', 'button');
-          $el.attr('tabindex', 0);
-      });
-
 
       // Add labels
       $('.facetwp-facet').each(function() {
