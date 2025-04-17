@@ -3,7 +3,7 @@ Contributors: devcollab, hbrokmeier, cparkinson, mrwweb
 Tags: accessibility
 Requires at least: 6.0
 Tested up to: 6.7.2
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -36,6 +36,14 @@ We add the Submit button as a Custom HTML block:
 Semantic HTML checkboxes courtesy of Mark Root-Wiley, [MRW Web Design](https://mrwweb.com/) [Accessibility Addon for FacetWP](https://github.com/mrwweb/accessibility-addon-for-facetwp)
 
 === Changelog ===
+= 1.1.0 =
+* Improved labels and markup
+* **[New]** Adds a label to some facets with text=facet_label, for=facet_name
+* **[New]** Adds fieldset and legend to checkboxes and radio buttons
+* **[New]** Search field uses &lt;search&gt; landmark, icon is removed
+ 
+**Full Changelog**: https://github.com/devcollaborative/a11y-add-on-for-facetwp/compare/v1.0.0...v1.1.0
+
 = 1.0.0 = 
 * Added: Accessibility improvements in html output for checkboxes, search box. All facets get labels, ids, and wrapper divs.
 
