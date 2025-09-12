@@ -17,6 +17,18 @@ defined( 'ABSPATH' ) or exit;
 define( 'A11Y_ADDON_VERSION', '1.1.0' );
 
 /**
+ * Load custom facet types
+ */
+function load_facets( $facet_types ) {
+  include( dirname( __FILE__ ) . '/facets/Submit.php' );
+
+  $facet_types['submit'] = new FacetWP_Facet_Submit();
+
+  return $facet_types;
+}
+add_filter( 'facetwp_facet_types', 'load_facets' );
+
+/**
  * Run plugin update process on activation.
  */
 function a11y_addon_handbook_activate() {
@@ -153,6 +165,7 @@ function a11y_addon_add_facet_labels() {
           // Exclude some facets from getting labels
           if (facet_name.match(/pagination/g) ||
               facet_name.match(/reset/g) ||
+              facet_name.match(/submit/g) ||
               facet_name.match(/results_count/g)) {
             return;
           }
@@ -198,6 +211,27 @@ function a11y_addon_add_facet_labels() {
 }
 
 add_action( 'facetwp_scripts', 'a11y_addon_add_facet_labels', 100 );
+
+/**
+ * Submit form when enter key is pressed
+ * @link https://facetwp.com/help-center/add-on-features-and-extras/submit-button#submit-on-enter
+*/
+function a11y_addon_add_facet_submit_form() {
+  ?>
+  <script>
+    (function() {
+      document.addEventListener('facetwp-loaded', function() {
+        document.addEventListener('keyup', function(event) {
+          if (event.keyCode === 13) {
+            FWP.refresh()
+          }
+        });
+      });
+    })();
+  </script>
+  <?php
+}
+add_action( 'facetwp_scripts', 'a11y_addon_add_facet_submit_form', 100 );
 
 /**
  * Hide counts in all dropdowns
