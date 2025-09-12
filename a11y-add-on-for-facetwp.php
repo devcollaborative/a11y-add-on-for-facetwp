@@ -93,10 +93,9 @@ function a11y_addon_transform_facet_markup( $output, $params ) {
       // Leaving that class and attribute on the wrapping list item resulted in two events being fired when the label was clicked.
       $output = '';
       foreach( $params['values'] as $value ) {
-        if( $value['counter'] > 0 || ! $params['facet']['preserve_ghosts'] === 'no' ) {
-          $output .= sprintf(
-            '<div class="facetwp-checkbox-wrapper">
-              <input type="checkbox" id="%3$s"%1$s value="%2$s" class="facetwp-checkbox%1$s" data-value="%2$s">
+        $checkbox = sprintf(
+            '<div class="facetwp-checkbox-wrapper %6$s">
+              <input type="checkbox" id="%3$s"%1$s value="%2$s" class="facetwp-checkbox%1$s" %6$s data-value="%2$s">
               <label for="%3$s">
                 <span class="facetwp-display-value">%4$s</span>
                 <span class="facetwp-counter">(%5$d)</span>
@@ -106,9 +105,11 @@ function a11y_addon_transform_facet_markup( $output, $params ) {
             esc_attr( $value['facet_value'] ),
             'checkbox-' . esc_attr( $value['term_id'] ),
             esc_html( $value['facet_display_value'] ),
-            $value['counter']
+            $value['counter'],
+          $value['counter'] == 0 ? 'disabled' : ''
           );
-        }
+        
+        $output .= $checkbox;
       }
       break;
 
