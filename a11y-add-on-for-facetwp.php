@@ -20,9 +20,27 @@ define( 'A11Y_ADDON_VERSION', '1.1.0' );
  * Load custom facet types
  */
 function load_facets( $facet_types ) {
+  // Load custom facets
   include( dirname( __FILE__ ) . '/facets/Submit.php' );
-
   $facet_types['submit'] = new FacetWP_Facet_Submit();
+
+  // Remove facets that aren't yet accessible
+  $disabled_facets = [
+    'autocomplete', // Autocomplete dropdown is not focusable.
+    'slider',       // Using min + max setting is not accessible. Needs further review.
+    'date_range',   // Uses a date picker library that isn't accessible.
+    'hierarchy',    // Not keyboard or screen reader accessible.
+    'rating',       // Not keyboard or screen reader accessible.
+    'fselect',      // Not keyboard or screen reader accessible.
+    'number_range', // Multiple inputs are not accessible.
+    'proximity',    // Missing labels, among other things.
+  ];
+
+  foreach( $disabled_facets as $facet ) {
+    if( isset( $facet_types[ $facet ] ) ) {
+      unset( $facet_types[ $facet ] );
+    }
+  }
 
   return $facet_types;
 }
