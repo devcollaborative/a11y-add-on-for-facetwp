@@ -17,6 +17,36 @@ defined( 'ABSPATH' ) or exit;
 define( 'A11Y_ADDON_VERSION', '1.1.0' );
 
 /**
+ * Load custom facet types
+ */
+function load_facets( $facet_types ) {
+  // Load custom facets
+  include( dirname( __FILE__ ) . '/facets/Submit.php' );
+  $facet_types['submit'] = new FacetWP_Facet_Submit();
+
+  // Remove facets that aren't yet accessible
+  $disabled_facets = [
+    'autocomplete', // Autocomplete dropdown is not focusable.
+    'slider',       // Using min + max setting is not accessible. Needs further review.
+    'date_range',   // Uses a date picker library that isn't accessible.
+    'hierarchy',    // Not keyboard or screen reader accessible.
+    'rating',       // Not keyboard or screen reader accessible.
+    'fselect',      // Not keyboard or screen reader accessible.
+    'number_range', // Multiple inputs are not accessible.
+    'proximity',    // Missing labels, among other things.
+  ];
+
+  foreach( $disabled_facets as $facet ) {
+    if( isset( $facet_types[ $facet ] ) ) {
+      unset( $facet_types[ $facet ] );
+    }
+  }
+
+  return $facet_types;
+}
+add_filter( 'facetwp_facet_types', 'load_facets' );
+
+/**
  * Run plugin update process on activation.
  */
 function a11y_addon_handbook_activate() {
@@ -39,45 +69,33 @@ function a11y_addon_update_check() {
 }
 add_action( 'plugins_loaded', 'a11y_addon_update_check' );
 
-
-/**
- * Enqueue jQuery because FacetWP just assumes it's enqueued.
-*/
-function a11y_addon_facet_assets() {
-  wp_enqueue_script('jquery');
-}
-add_action( 'wp_enqueue_scripts', 'a11y_addon_facet_assets' );
-
-
 /**
  * Adjusts markup for specific facets so they use real input elements
  * Adds matching label for and ids to all facets
  *
  * @param string $output HTML
  * @param array $params FacetWP field parameters
- * 
+ *
  * @return string Updated HTML output for a facet
- * 
+ *
  * @todo consider whether a combination of totally custom output and str_replace make sense or whether doing something with the WP HTML API might make more sense in the long term
- * 
+ *
  * most of this courtesy of Mark Root-Wiley
  * @link https://github.com/mrwweb/accessibility-addon-for-facetwp
  */
 function a11y_addon_transform_facet_markup( $output, $params ) {
-
   $facet_type = $params['facet']['type'];
 
-  switch ($facet_type) {
-  
+  switch ( $facet_type )  {
     case 'checkboxes':
-      // Note: The trick to this working was moving the facetwp-checkbox class and data-value attribute to the `input`. Clicking the label works because the input element still emits a click event when the label is clicked. Leaving that class and attribute on the wrapping list item resulted in two events being fired when the label was clicked.
-      $output = sprintf('<fieldset><legend>%1$s</legend>', 
-          $params['facet']['label'] );
+      // Note: The trick to this working was moving the facetwp-checkbox class and data-value attribute to the `input`.
+      // Clicking the label works because the input element still emits a click event when the label is clicked.
+      // Leaving that class and attribute on the wrapping list item resulted in two events being fired when the label was clicked.
+      $output = '';
       foreach( $params['values'] as $value ) {
-        if( $value['counter'] > 0 || ! $params['facet']['preserve_ghosts'] === 'no' ) {
-          $output .= sprintf(
-            '<div>
-              <input type="checkbox" id="%3$s"%1$s value="%2$s" class="facetwp-checkbox%1$s" data-value="%2$s">
+        $checkbox = sprintf(
+            '<div class="facetwp-checkbox-wrapper %6$s">
+              <input type="checkbox" id="%3$s"%1$s value="%2$s" class="facetwp-checkbox%1$s" %6$s data-value="%2$s">
               <label for="%3$s">
                 <span class="facetwp-display-value">%4$s</span>
                 <span class="facetwp-counter">(%5$d)</span>
@@ -87,65 +105,36 @@ function a11y_addon_transform_facet_markup( $output, $params ) {
             esc_attr( $value['facet_value'] ),
             'checkbox-' . esc_attr( $value['term_id'] ),
             esc_html( $value['facet_display_value'] ),
-            $value['counter']
+            $value['counter'],
+          $value['counter'] == 0 ? 'disabled' : ''
           );
-        }
+        
+        $output .= $checkbox;
       }
-      $output .= '</fieldset>';
       break;
 
     case 'search':
-      // use search landmark and insert a real button
-      $output = '<search>' . $output . '</search>';
       // remove the fake button
       $output = str_replace( '<i class="facetwp-icon"></i>', '', $output );
+
       // add label to search input
       $id = $params['facet']['name'];
-      $output = str_replace( 
-        '<input', '<div class="trec-facetwp-search-wrapper"><input id="' . esc_attr( $id ) . '"', $output );
-     
+      $output = str_replace( '<input', '<div class="trec-facetwp-search-wrapper"><input id="' . esc_attr( $id ) . '"', $output );
+
       // placeholders are bad for UX
       $output = str_replace( 'placeholder="Enter keywords"', '', $output );
       break;
 
     case 'dropdown':
-      
       $output = str_replace( 'facetwp-dropdown', 'facetwp-dropdown a11y-addon-filter', $output );
 
-      $id_string = 'id="'.$params['facet']['name'].'" class=';
+      $id_string = 'id="' . $params['facet']['name'] . '" class=';
 
       $output = str_replace('class=', $id_string, $output);
-
-      break;
-
-    case 'radio':
-      $output = sprintf('<fieldset><legend>%1$s</legend>', 
-          $params['facet']['label'] );
-      foreach( $params['values'] as $value ) {
-           $output .= sprintf(
-            '<div><input type="radio" id="%1$s" name="%3$s" value="%2$s">
-            <label for="%1$s">%2$s</label></div>',
-            esc_attr( 'radio-'.$value['facet_value'] ),
-            esc_html( $value['facet_display_value'] ),
-            esc_attr( $params['facet']['name'] )
-           ); 
-      }
-
-      $output .= '</fieldset>';
       break;
 
     case 'reset':
-
-      $output = str_replace('button','button type="reset"',$output);
-
-      break; 
-
-    case 'pager':
-
-      $output = sprintf('
-          <nav class="navigation pagination" aria-label="Pagination"><h2 class="screen-reader-text">Pagination</h2>%1$s</nav>', 
-          $output);
-      
+      $output = str_replace('<button', '<button type="reset"', $output);
       break;
 
     default:
@@ -153,9 +142,22 @@ function a11y_addon_transform_facet_markup( $output, $params ) {
       $id_string = 'id="'.$params['facet']['name'].'" class=';
 
       $output = str_replace('class=', $id_string, $output);
+      break;
 
+    case 'pager':
+      // Use nav element for pager
+      $output = str_replace( '<div', '<nav aria-label="' . esc_html__( 'Pagination', 'aawp' ) . '"', $output );
+      $output = str_replace( '</div>', '</nav>', $output );
+
+      // Add role="presentation" to dots & active item so screen readers don't read them as links
+      $output = str_replace( 'facetwp-page dots"', 'facetwp-page dots" role="presentation"', $output );
+      $output = str_replace( 'facetwp-page active"', 'facetwp-page active" role="presentation"', $output );
+
+      // Change page links to buttons
+      $output = str_replace( 'a ', 'button ', $output );
+      break;
   }
-  
+
   return $output;
 }
 
@@ -166,84 +168,94 @@ add_filter( 'facetwp_facet_html', 'a11y_addon_transform_facet_markup', 10, 2);
  * Programatically add labels above filters
  * @link https://facetwp.com/add-labels-above-each-facet/
 */
-
 function a11y_addon_add_facet_labels() {
   ?>
   <script>
-  (function($) {
-
-    function remove_underscores( name ) {
-        return name.replace(/_/g, ' ');
-    }
-
-    // Make enter & space work for links
-    $(document).on('keydown', '.facetwp-page, .facetwp-toggle, .facetwp-selection-value', function(e) {
-        var keyCode = e.originalEvent.keyCode;
-        if ( 32 == keyCode || 13 == keyCode ) {
-            e.preventDefault();
-            $(this).click();
-        }
-    });
-
-    $(document).on('keydown', '.facetwp-checkbox, .facetwp-radio', function(e) {
-        var keyCode = e.originalEvent.keyCode;
-        if ( 32 == keyCode || 13 == keyCode ) {
-          var is_checked = $(this).hasClass('checked');
-
-          if (!is_checked) {
-            $(this).attr('aria-checked', 'true');
-          } else {
-            $(this).attr('aria-checked', 'false');
-          }
-
-          e.preventDefault();
-          $(this).click();
-        }
-    });
-
-    $(document).on('facetwp-loaded', function() {
-
-      // pager
-      $('.facetwp-pager').attr('role', 'navigation');
-
+  (function() {
+    document.addEventListener('facetwp-loaded', function() {
       // Add labels
-      $('.facetwp-facet').each(function() {
-        var $facet = $(this);
-        var facet_name = $facet.attr('data-name');
-        var facet_type = $facet.attr('data-type');
+      var facets = document.querySelectorAll('.facetwp-facet');
 
-        if ( facet_name && facet_type ) {
-          // Don't label some facets
-          if ( facet_type.match(/checkboxes|radio|pager|reset|results_count/g) ) {
+      facets.forEach(function(facet) {
+        var facet_name = facet.getAttribute('data-name');
+        var facet_type = facet.getAttribute('data-type');
+
+        if (facet_name && facet_type) {
+          // Exclude some facets from getting labels
+          if (facet_name.match(/pagination/g) ||
+              facet_name.match(/reset/g) ||
+              facet_name.match(/submit/g) ||
+              facet_name.match(/results_count/g)) {
             return;
           }
 
           var facet_label = FWP.settings.labels[facet_name];
 
-          if ($facet.closest('.facet-wrap').length < 1 && $facet.closest('.facetwp-flyout').length < 1) {
+          if (!facet.closest('.facet-wrap') && !facet.closest('.facetwp-flyout')) {
+            if (facet_type.match(/checkboxes/g) || facet_type.match(/radio/g)) {
+              // Checkboxes & radio buttons need a fieldset/legend created here using role group & arialabelledby
+              var wrapDiv = document.createElement('div');
+              wrapDiv.className = 'facet-wrap facet-wrap-' + facet_name;
+              wrapDiv.setAttribute('role', 'group');
+              wrapDiv.setAttribute('aria-labelledby', facet_name + '_label');
 
-             //wrapper div
-              $facet.wrap(`<div class="facet-wrap facet-wrap-${facet_name}"></div>`);
+              var labelDiv = document.createElement('div');
+              labelDiv.id = facet_name + '_label';
+              labelDiv.className = 'facet-label';
+              labelDiv.textContent = facet_label;
 
-              //label
-              $facet.before('<label class="facet-label" for="'+facet_name.replace(/\s/g, '')+'">' + facet_label + '</label>');
-            
+              facet.parentNode.insertBefore(wrapDiv, facet);
+              wrapDiv.appendChild(labelDiv);
+              wrapDiv.appendChild(facet);
+            } else {
+              var wrapDiv = document.createElement('div');
+              wrapDiv.className = 'facet-wrap facet-wrap-' + facet_name;
+
+              var label = document.createElement('label');
+              label.className = 'facet-label';
+              label.setAttribute('for', facet_name.replace(/\s/g, '')); // remove spaces for id
+              label.textContent = facet_label;
+
+              facet.parentNode.insertBefore(wrapDiv, facet);
+              wrapDiv.appendChild(label);
+              wrapDiv.appendChild(facet);
+            }
           }
         }
       });
     });
-  })(jQuery);
+  })();
   </script>
   <?php
 }
 
-add_action( 'wp_head', 'a11y_addon_add_facet_labels', 100 );
+add_action( 'facetwp_scripts', 'a11y_addon_add_facet_labels', 100 );
+
+/**
+ * Submit form when enter key is pressed
+ * @link https://facetwp.com/help-center/add-on-features-and-extras/submit-button#submit-on-enter
+*/
+function a11y_addon_add_facet_submit_form() {
+  ?>
+  <script>
+    (function() {
+      document.addEventListener('facetwp-loaded', function() {
+        document.addEventListener('keyup', function(event) {
+          if (event.keyCode === 13) {
+            FWP.refresh()
+          }
+        });
+      });
+    })();
+  </script>
+  <?php
+}
+add_action( 'facetwp_scripts', 'a11y_addon_add_facet_submit_form', 100 );
 
 /**
  * Hide counts in all dropdowns
  * @link https://facetwp.com/help-center/facets/facet-types/dropdown/
 */
-
 function a11y_addon_hide_dropdown_counts( $return, $params ) {
 	return false;
 }
@@ -267,48 +279,3 @@ function a11y_addon_disable_auto_refresh() {
 <?php
 }
 add_action( 'facetwp_scripts', 'a11y_addon_disable_auto_refresh', 100 );
-
-// Customize icon for prev/next pagination links.
-function a11y_addon_facetwp_facet_pager_link($html, $params) {
-  if ( 'next' == $params['extra_class'] ) {
-    $icon = 'Next <svg class="icon" aria-hidden="true"><use xlink:href="#caret-right"/></svg></svg>';
-    $html = str_replace( 'Next', $icon, $html );
-  }
-
-  if ( 'prev' == $params['extra_class'] ) {
-    $icon = '<svg class="icon" aria-hidden="true"><use xlink:href="#caret-left"/></svg></svg> Prev';
-    $html = str_replace( 'Prev', $icon, $html );
-  }
-
-  return $html;
-}
-add_action( 'facetwp_facet_pager_link', 'a11y_addon_facetwp_facet_pager_link', 100, 2 );
-
-/**
-* Scroll back to top of results when pager is clicked
-* @link https://facetwp.com/how-to-scroll-the-page-on-facet-interaction/#scroll-when-a-pager-facet-is-used
-**/
-
-function a11y_addon_scroll_on_pager_interaction() {
-?>
-  <script>
-    (function($) {
-      $(document).on('facetwp-refresh', function() {
-          if ( FWP.soft_refresh == true )  {
-            FWP.enable_scroll = true;
-          } else {
-            FWP.enable_scroll = false;
-          }
-      });
-      $(document).on('facetwp-loaded', function() {
-        if (FWP.enable_scroll == true) {
-          $('html, body').animate({
-            scrollTop: $('.facetwp-template').offset().top
-          }, 500);
-        }
-      });
-    })(jQuery);
-  </script>
-<?php
-}
-add_action( 'facetwp_scripts', 'a11y_addon_scroll_on_pager_interaction' );
