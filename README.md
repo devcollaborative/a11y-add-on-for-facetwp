@@ -19,11 +19,9 @@ FacetWP must be installed and activated.
 - Disables auto-refresh
 - Customizes icon for prev/next pagination links
 - Scroll back to top of results when pager is clicked
+- Only accessible facet types are enabled: Checkboxes, Dropdown, Radio, Search, Pager, Reset, Sort
+- Custom "Submit" facet type added
 
-## Search button
-We add the Submit button as a Custom HTML block:
-```
-<button id="search" onclick="FWP.refresh()" class="facetsubmit" type="submit">Filter</button>
-```
+
 
 Semantic HTML checkboxes courtesy of Mark Root-Wiley, [MRW Web Design](https://mrwweb.com/) [Accessibility Addon for FacetWP](https://github.com/mrwweb/accessibility-addon-for-facetwp)
