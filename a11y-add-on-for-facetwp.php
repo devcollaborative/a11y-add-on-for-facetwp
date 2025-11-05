@@ -279,3 +279,20 @@ function a11y_addon_disable_auto_refresh() {
 <?php
 }
 add_action( 'facetwp_scripts', 'a11y_addon_disable_auto_refresh', 100 );
+
+
+/**
+ * Plugin updates via GitHub
+ * @link https://github.com/YahnisElsts/plugin-update-checker
+ */
+
+require dirname( __FILE__ ) . '/plugin-update-checker/plugin-update-checker.php';
+
+$myUpdateChecker = YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker(
+	'https://github.com/devcollaborative/a11y-add-on-for-facetwp',
+	__FILE__,
+	'a11y-add-on-for-facetwp'
+);
+
+//Set the branch that contains the stable release.
+$myUpdateChecker->setBranch('main');	
