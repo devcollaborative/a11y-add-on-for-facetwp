@@ -3,7 +3,7 @@ Contributors: devcollab, hbrokmeier, cparkinson, mrwweb
 Tags: accessibility
 Requires at least: 6.0
 Tested up to: 6.7.2
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -34,6 +34,11 @@ FacetWP must be installed and activated.
 Semantic HTML checkboxes courtesy of Mark Root-Wiley, [MRW Web Design](https://mrwweb.com/) [Accessibility Addon for FacetWP](https://github.com/mrwweb/accessibility-addon-for-facetwp)
 
 === Changelog ===
+= 1.1.1 = 
+**[New]** Yahnis Elsts' git updater checker added
+
+**Full Changelog**: https://github.com/devcollaborative/a11y-add-on-for-facetwp/compare/v1.1.0...v1.1.1
+
 = 1.1.0 =
 * Improved labels and markup
 * **[New]** Adds a label to some facets with text=facet_label, for=facet_name
