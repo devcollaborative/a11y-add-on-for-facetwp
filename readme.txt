@@ -1,9 +1,9 @@
 === A11y-Add-on-for-FacetWP ===
 Contributors: devcollab, hbrokmeier, cparkinson, mrwweb 
 Tags: accessibility
-Requires at least: 6.0
-Tested up to: 6.7.2
-Stable tag: 1.1.1
+Requires at least: 6.4
+Tested up to: 6.8.3
+Stable tag: 1.1.2
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -34,6 +34,16 @@ FacetWP must be installed and activated.
 Semantic HTML checkboxes courtesy of Mark Root-Wiley, [MRW Web Design](https://mrwweb.com/) [Accessibility Addon for FacetWP](https://github.com/mrwweb/accessibility-addon-for-facetwp)
 
 === Changelog ===
+= 1.1.2 = 
+## What's Changed
+* Facet updates by @hbrok in https://github.com/devcollaborative/a11y-add-on-for-facetwp/pull/2
+
+## New Contributors
+* @hbrok made their first contribution in https://github.com/devcollaborative/a11y-add-on-for-facetwp/pull/2
+
+**Full Changelog**: https://github.com/devcollaborative/a11y-add-on-for-facetwp/compare/v1.1.0...1.1.2
+
+
 = 1.1.1 = 
 **[New]** Yahnis Elsts' git updater checker added
 

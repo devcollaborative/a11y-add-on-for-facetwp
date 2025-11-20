@@ -3,7 +3,7 @@
  * Plugin Name: A11y Add-on for FacetWP
  * Plugin URI: https://github.com/devcollaborative/A11y-Add-on-for-FacetWP
  * Description: Adds better a11y support to FacetWP plugin. Disable FacetWP's native "Load a11y support"
- * Version: 1.1.1
+ * Version: 1.1.2
  * Requires at least: 6.4
  * Requires PHP: 8
  * Author: DevCollaborative
@@ -14,7 +14,7 @@
 
 defined( 'ABSPATH' ) or exit;
 
-define( 'A11Y_ADDON_VERSION', '1.1.1' );
+define( 'A11Y_ADDON_VERSION', '1.1.2' );
 
 /**
  * Load custom facet types
