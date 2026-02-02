@@ -36,6 +36,7 @@ function load_facets( $facet_types ) {
       'fselect',      // Not keyboard or screen reader accessible.
       'number_range', // Multiple inputs are not accessible.
       'proximity',    // Missing labels, among other things.
+      'map',          // Not vetted yet.
     ];
 
     foreach( $disabled_facets as $facet ) {
