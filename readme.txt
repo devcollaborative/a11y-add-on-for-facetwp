@@ -34,6 +34,13 @@ FacetWP must be installed and activated.
 Semantic HTML checkboxes courtesy of Mark Root-Wiley, [MRW Web Design](https://mrwweb.com/) [Accessibility Addon for FacetWP](https://github.com/mrwweb/accessibility-addon-for-facetwp)
 
 === Changelog ===
+
+= 1.1.3 = 
+- New Map facet is not loaded
+- Code to not load inaccessible facets only runs in WP admin (removes php warning)
+
+**Full Changelog**: https://github.com/devcollaborative/a11y-add-on-for-facetwp/compare/1.1.2...v1.1.3
+
 = 1.1.2 = 
 ## What's Changed
 * Facet updates by @hbrok in https://github.com/devcollaborative/a11y-add-on-for-facetwp/pull/2
