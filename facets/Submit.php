@@ -1,7 +1,5 @@
 <?php
 
-use FacetWP_Facet;
-
 class FacetWP_Facet_Submit extends FacetWP_Facet {
     function __construct() {
         $this->label = __( 'Submit', 'fwp' );
