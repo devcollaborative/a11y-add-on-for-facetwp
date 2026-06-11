@@ -1,9 +1,9 @@
 === A11y-Add-on-for-FacetWP ===
-Contributors: devcollab, hbrokmeier, cparkinson, mrwweb 
+Contributors: devcollab, hbrokmeier, cparkinson, mrwweb
 Tags: accessibility
 Requires at least: 6.4
-Tested up to: 6.8.3
-Stable tag: 1.1.2
+Tested up to: 7.0.0
+Stable tag: 1.1.4
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -35,13 +35,18 @@ Semantic HTML checkboxes courtesy of Mark Root-Wiley, [MRW Web Design](https://m
 
 === Changelog ===
 
-= 1.1.3 = 
+= 1.1.4 =
+- Fixes PHP warning
+
+**Full Changelog**: https://github.com/devcollaborative/a11y-add-on-for-facetwp/compare/1.1.3...v1.1.4
+
+= 1.1.3 =
 - New Map facet is not loaded
 - Code to not load inaccessible facets only runs in WP admin (removes php warning)
 
 **Full Changelog**: https://github.com/devcollaborative/a11y-add-on-for-facetwp/compare/1.1.2...v1.1.3
 
-= 1.1.2 = 
+= 1.1.2 =
 ## What's Changed
 * Facet updates by @hbrok in https://github.com/devcollaborative/a11y-add-on-for-facetwp/pull/2
 
@@ -51,7 +56,7 @@ Semantic HTML checkboxes courtesy of Mark Root-Wiley, [MRW Web Design](https://m
 **Full Changelog**: https://github.com/devcollaborative/a11y-add-on-for-facetwp/compare/v1.1.0...1.1.2
 
 
-= 1.1.1 = 
+= 1.1.1 =
 **[New]** Yahnis Elsts' git updater checker added
 
 **Full Changelog**: https://github.com/devcollaborative/a11y-add-on-for-facetwp/compare/v1.1.0...v1.1.1
@@ -61,10 +66,10 @@ Semantic HTML checkboxes courtesy of Mark Root-Wiley, [MRW Web Design](https://m
 * **[New]** Adds a label to some facets with text=facet_label, for=facet_name
 * **[New]** Adds fieldset and legend to checkboxes and radio buttons
 * **[New]** Search field uses &lt;search&gt; landmark, icon is removed
- 
+
 **Full Changelog**: https://github.com/devcollaborative/a11y-add-on-for-facetwp/compare/v1.0.0...v1.1.0
 
-= 1.0.0 = 
+= 1.0.0 =
 * Added: Accessibility improvements in html output for checkboxes, search box. All facets get labels, ids, and wrapper divs.
 
 **Full Changelog**: https://github.com/devcollaborative/a11y-add-on-for-facetwp/commits/v1.0.0
